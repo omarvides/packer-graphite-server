@@ -1,0 +1,4 @@
+# Not versioning go vendors directory
+**/vendors
+.idea
+variables.json

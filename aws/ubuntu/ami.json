@@ -1,0 +1,61 @@
+{
+    "variables": {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "region": "us-east-1"
+    },
+    "builders": [
+        {
+            "access_key": "{{user `aws_access_key`}}",
+            "ami_name": "graphite-server-{{timestamp}}",
+            "instance_type": "t2.micro",
+            "region": "us-east-1",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "source_ami": "ami-04169656fea786776",
+            "ssh_username": "ubuntu",
+            "type": "amazon-ebs"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "execute_command": "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
+            "scripts": [
+                "scripts/ubuntu/install-packages.sh"
+            ],
+            "environment_vars": [
+                "ROOT_PASSWORD={{user `mysql_root_password`}}"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "mysql -u root -p{{user `mysql_root_password`}} -e \"CREATE USER '{{ user `database_user`}}' IDENTIFIED BY '{{ user `password`}}';\"",
+                "mysql -u root -p{{user `mysql_root_password`}} -e \"CREATE DATABASE IF NOT EXISTS {{user `database_name`}} DEFAULT CHARACTER SET utf8;\"",
+                "mysql -u root -p{{user `mysql_root_password`}} -e \"GRANT ALL PRIVILEGES ON {{user `database_name`}}.* TO '{{user `database_user`}}'@'localhost' IDENTIFIED by '{{user `database_password`}}';\""
+            ]
+        },
+        {
+            "type": "shell",
+            "execute_command": "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
+            "scripts": [
+                "scripts/ubuntu/configuration/set-configurations.sh"
+            ],
+            "environment_vars": [
+                "SECRET_TEXT={{user `secret_text`}}",
+                "TIMEZONE={{user `timezone`}}",
+                "DATABASE_NAME={{user `database_name`}}",
+                "DATABASE_USER={{user `database_user`}}",
+                "DATABASE_PASSWORD={{user `database_password`}}",
+                "GRAPHITE_PORT={{user `graphite_port`}}"
+            ]
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "manifest",
+            "output": "manifest.json",
+            "strip_path": true
+        }
+    ]
+}
