@@ -43,6 +43,8 @@ mysql_root_password
 }
 ```
 
+This repository also installs statsd under ```/opt/statsd``` directory and configures it to listen on port ```8125``` 
+
 ## Pending
 
 This won't create your graphite web superuser, you would need to manually run inside your server
@@ -52,6 +54,14 @@ graphite-manage createsuperuser
 ```
 
 to create and enable an admin user for your graphite web ui
+
+## Known issues
+
+When building with t2.micro image, ubuntu could not be able to install some packages, this is been happening randomly and I haven't been able to figure out why yet, if that happens, try re running the packer build command.
+
+```
+amazon-ebs: E: Could not open file /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_xenial_main_binary-amd64_Packages - open (2: No such file or directory)
+```
 
 ## Key concepts
 

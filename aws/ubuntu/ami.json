@@ -39,7 +39,8 @@
             "type": "shell",
             "execute_command": "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
             "scripts": [
-                "scripts/ubuntu/configuration/set-configurations.sh"
+                "scripts/ubuntu/configuration/set-configurations.sh",
+                "scripts/ubuntu/configuration/install-statsd.sh"
             ],
             "environment_vars": [
                 "SECRET_TEXT={{user `secret_text`}}",
