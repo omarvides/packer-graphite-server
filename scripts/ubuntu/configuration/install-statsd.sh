@@ -19,5 +19,22 @@ echo "{
 
 # Restarting carbon-cache service and starting stat
 systemctl restart carbon-cache
-cd /opt/statsd
-node ./stats.js ./localConfig.js &
+
+# Create statsd unit file
+
+sudo echo "[Unit]
+Description=network daemon to collect metrics
+
+[Service]
+User=root
+Type=simple
+ExecStart=/usr/bin/node /opt/statsd/stats.js /opt/statsd/localConfig.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/statsd.service
+
+# Starting and enabling statsd service
+sudo systemctl start statsd
+sudo systemctl enable statsd
+

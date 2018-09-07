@@ -48,7 +48,10 @@
                 "DATABASE_NAME={{user `database_name`}}",
                 "DATABASE_USER={{user `database_user`}}",
                 "DATABASE_PASSWORD={{user `database_password`}}",
-                "GRAPHITE_PORT={{user `graphite_port`}}"
+                "GRAPHITE_PORT={{user `graphite_port`}}",
+                "GRAPHITE_USER={{user `graphite_user`}}",
+                "GRAPHITE_EMAIL={{user `graphite_email`}}",
+                "GRAPHITE_PASSWORD={{user `graphite_password`}}"
             ]
         }
     ],

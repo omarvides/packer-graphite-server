@@ -38,3 +38,8 @@ sudo sed -i "s/Listen 80/Listen 80\nListen ${GRAPHITE_PORT}/g" /etc/apache2/port
 # Enabling apache2-graphite site on apache2 and restarting apache 2 service
 a2ensite apache2-graphite 
 systemctl restart apache2
+
+# Crate superuser for graphite web app (using Django command)
+echo "from django.contrib.auth.models import User
+User.objects.create_superuser('${GRAPHITE_USER}', '${GRAPHITE_EMAIL}', '${GRAPHITE_PASSWORD}')" > /tmp/superuser.py
+sudo graphite-manage shell < /tmp/superuser.py

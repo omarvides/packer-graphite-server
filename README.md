@@ -39,21 +39,20 @@ mysql_root_password
   "database_user": "graphite_user",
   "database_password": "graphite_password",
   "graphite_port": "8080",
-  "mysql_root_password": "root"
+  "mysql_root_password": "root",
+  "graphite_user": "graphite_user",
+  "graphite_email": "graphite@email",
+  "graphite_password": "graphite_password"
 }
 ```
 
-This repository also installs statsd under ```/opt/statsd``` directory and configures it to listen on port ```8125``` 
+This repository also installs statsd under ```/opt/statsd``` directory and configures it to listen on port ```8125``` and configures it as a service, set to run on boot
 
 ## Pending
 
-This won't create your graphite web superuser, you would need to manually run inside your server
-
-``` bash
-graphite-manage createsuperuser
-```
-
-to create and enable an admin user for your graphite web ui
+* Use SSL
+* Close unused ports using firewall
+* Use a domain
 
 ## Known issues
 
